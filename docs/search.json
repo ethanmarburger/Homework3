@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "Homework3.html",
+    "href": "Homework3.html",
+    "title": "Homework3",
+    "section": "",
+    "text": "Ethan Marburger 09/10/2024 St558"
+  },
+  {
+    "objectID": "Homework3.html#task-2-writing-functions",
+    "href": "Homework3.html#task-2-writing-functions",
+    "title": "Homework3",
+    "section": "Task 2: Writing Functions",
+    "text": "Task 2: Writing Functions\n\nwriting a function that adheres to the given guidelines in HW3\n\n\n#Define the function\ncalculate_statistics &lt;- function(df_list, stat = \"mean\") {\n  \n  #Function for the specified statistic\n  my_fun &lt;- get(stat)\n  \n  #List of columns to analyze\n  columns &lt;- c(\"pre_bp\", \"post_bp\", \"diff_bp\")\n  \n  #Apply the function to each data frame in the list\n  all_stats &lt;- unlist(lapply(names(df_list), function(df_name) {\n    df &lt;- df_list[[df_name]]\n    \n    #Apply the function to each column and store results\n    result &lt;- sapply(columns, function(col) {\n      if (col %in% names(df)) {\n        my_fun(df[[col]], na.rm = TRUE)\n      } else {\n        NA\n      }\n    })\n    \n    #Create meaningful names for the results\n    names(result) &lt;- paste(df_name, columns, stat, sep = \"_\")\n    return(result)\n  }))\n  \n  return(all_stats)\n}\n\nApplying function to list of data frames!\n\n#Default mean\nprint(calculate_statistics(bp_list))  \n\n treatment_pre_bp_mean treatment_post_bp_mean treatment_diff_bp_mean \n                131.60                 125.95                   5.65 \n   placebo_pre_bp_mean   placebo_post_bp_mean   placebo_diff_bp_mean \n                131.90                 128.90                   3.00 \n\n#Specifying different statistics\nprint(calculate_statistics(bp_list, \"var\"))  \n\n treatment_pre_bp_var treatment_post_bp_var treatment_diff_bp_var \n             75.72632              78.99737             117.81842 \n   placebo_pre_bp_var   placebo_post_bp_var   placebo_diff_bp_var \n            149.87778             124.98889             341.33333 \n\nprint(calculate_statistics(bp_list, \"sd\"))    \n\n treatment_pre_bp_sd treatment_post_bp_sd treatment_diff_bp_sd \n            8.702087             8.888046            10.854419 \n   placebo_pre_bp_sd   placebo_post_bp_sd   placebo_diff_bp_sd \n           12.242458            11.179843            18.475209 \n\nprint(calculate_statistics(bp_list, \"min\"))   \n\n treatment_pre_bp_min treatment_post_bp_min treatment_diff_bp_min \n                  115                   114                   -24 \n   placebo_pre_bp_min   placebo_post_bp_min   placebo_diff_bp_min \n                  114                   105                   -21 \n\nprint(calculate_statistics(bp_list, \"max\"))\n\n treatment_pre_bp_max treatment_post_bp_max treatment_diff_bp_max \n                  151                   146                    21 \n   placebo_pre_bp_max   placebo_post_bp_max   placebo_diff_bp_max \n                  152                   143                    33"
+  }
+]

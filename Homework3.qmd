@@ -4,9 +4,9 @@ format: html
 editor: visual
 ---
 
-## Homework 3
-
-Ethan Marburger 09/10/2024 St558
+Ethan Marburger 
+09/10/2024 
+St558
 
 ### Setting up My Environment
 
