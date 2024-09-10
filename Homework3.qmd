@@ -1,0 +1,99 @@
+---
+title: "Homework3"
+format: html
+editor: visual
+---
+
+## Homework 3
+Ethan Marburger
+09/10/2024
+St558
+
+### Setting up My Environment
+
+```{r}
+#loading .rda file from local directory
+load("hw2_list.rda")
+```
+
+### Task 1: Control Flow Practice
+
+1) Characterize post-treatment (or placebo) blood pressure measurement as optimal (≤ 120), borderline (120 < bp ≤ 130), and high (> 130)
+```{r}
+#Creating a new column in my placebo data frame in the bp_list
+placebo <- bp_list[[2]]
+placebo$status <- character(10)
+placebo #checking to see if new data frame "placebo" contains the    appropriate column
+```
+```{r}
+#Characterizing post-treatment measurements
+placebo$status <- ifelse(placebo$post_bp <= 120, "optimal",
+                         ifelse(placebo$post_bp <= 130, "borderline", "high"))
+print(placebo)
+```
+2) For the non-placebo data frame (within the list), create a for loop and use if/then/else logic to create the status column’s values.
+
+```{r}
+for (i in 1:20) {
+  bp_list[[1]]$status <- ifelse(placebo$post_bp <= 120, "optimal",
+                         ifelse(placebo$post_bp <= 130, "borderline", "high"))
+}
+print(bp_list[[1]])
+```
+
+3) Repeating above for loop for the placebo data frame (within the list)
+
+```{r}
+for (i in 1:10) {
+  bp_list[[2]]$status <- ifelse(placebo$post_bp <= 120, "optimal",
+                         ifelse(placebo$post_bp <= 130, "borderline", "high"))
+}
+print(bp_list[[2]])
+```
+
+## Task 2: Writing Functions
+
+1) writing a function that adheres to the given guidelines in HW3
+
+```{r}
+#Define the function
+calculate_statistics <- function(df_list, stat = "mean") {
+  
+  #Function for the specified statistic
+  my_fun <- get(stat)
+  
+  #List of columns to analyze
+  columns <- c("pre_bp", "post_bp", "diff_bp")
+  
+  #Apply the function to each data frame in the list
+  all_stats <- unlist(lapply(names(df_list), function(df_name) {
+    df <- df_list[[df_name]]
+    
+    #Apply the function to each column and store results
+    result <- sapply(columns, function(col) {
+      if (col %in% names(df)) {
+        my_fun(df[[col]], na.rm = TRUE)
+      } else {
+        NA
+      }
+    })
+    
+    #Create meaningful names for the results
+    names(result) <- paste(df_name, columns, stat, sep = "_")
+    return(result)
+  }))
+  
+  return(all_stats)
+}
+```
+
+Applying function to list of data frames!
+```{r}
+#Default mean
+print(calculate_statistics(bp_list))  
+#Specifying different statistics
+print(calculate_statistics(bp_list, "var"))  
+print(calculate_statistics(bp_list, "sd"))    
+print(calculate_statistics(bp_list, "min"))   
+print(calculate_statistics(bp_list, "max"))
+```
